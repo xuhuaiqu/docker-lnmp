@@ -74,14 +74,6 @@ Mac下直接到官网下载Docker.dmg 自带了docker-compose命令
 启动docker
 
 ```
-service docker start
-```
-
-> 第一次构建需要下载环境，时间会比较长，除了下载docker中心的镜像，还要构建镜像
-> 看网速，如果用阿里云，15分钟差不多完成，使用下面的命令构建环境
-
-```
-chmod 755 /usr/local/bin/docker-compose
 docker-compose build
 ```
 
