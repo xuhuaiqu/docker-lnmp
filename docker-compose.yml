@@ -24,6 +24,7 @@ services:
         - code-network
     depends_on:
       - php
+
   mysql:
     platform: linux/x86_64
     image: mysql
@@ -33,13 +34,15 @@ services:
       - ./db/mysql/data:/var/lib/mysql 
       - ./db/mysql/log:/var/log/myva
       - ./db/mysql/example_db:/var/example_db 
-      - ./db/mysql/conf.d:/etc/mysql/conf.d  
+      - ./db/mysql/conf.d:/etc/mysql/conf.d 
+    # 解决Mysql8.0版本默认身份认证插件PHP7.0不支持的问题
     command: --default-authentication-plugin=mysql_native_password  
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     networks:
       - code-network 
+      
   redis:
     image: redis:latest
     ports:  
@@ -61,7 +64,6 @@ services:
     networks:
       - code-network 
 
-  
   elasticsearch:
     image: elasticsearch:7.13.1
     container_name: elasticsearch

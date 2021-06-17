@@ -1,7 +1,6 @@
 
-LNMP Docker Compose
+DLNMP
 =============
-
 
 > 通过docker compose 根据官方镜像构建的环境 本项目适用于mac apple芯片版本
 > PHP7.0.33 + Mysql最新版本 + Nginx最新版本 + Redis最新版本 + elasticsearch7.13.1
@@ -15,7 +14,6 @@ LNMP Docker Compose
 	│   ├── elasticsearch           elasticsearch数据库
 	│   │   ├── conf          		elasticsearch配置文件
 	│   │   ├── data				elasticsearch数据库表数据存放的位置
-	│   │   └── log
 	│   ├── mysql             		mysql数据库
 	│   │   ├── conf.d          	mysql 配置文件
 	│   │   ├── data				mysql数据库表数据存放的位置
@@ -33,24 +31,15 @@ LNMP Docker Compose
 	│   │   │   ├── Dockerfile		php镜像构建的dockerfile文件
 	│   │   │   └── extension		PHP拓展目录在此添加你自己的拓展
 	│   │   └── etc
-	│   │       └── php7.0.26.ini	php的配置文件
+	│   │       └── php7.0.33.ini	php的配置文件
 	│   └── web
 	│       └── nginx
 	└── tool
 	    ├── app 					相当于/usr/work/tool/app 存放代码目录
-	    ├── conf
-	    │   └── os_order 			相当于/usr/work/tool/conf 存放配置文件
 	    ├── data
-	    ├── framework 				框架目录
-	    │   └── yii-1.1.13.e9e4a0
-	    ├── log						日志目录 Yii_Log记录
-	    │   └── log_data
-	    ├── phplib					PHP Zrb常用库
-	    ├── webroot					配置index.php的地方
-	    │   └── os_order
+	    ├── log						日志目录
 	    └── webserver 				nginx所在目录
 	        ├── conf					nginx配置文件.conf
-	        ├── html
 	        └── logs					nginx日志
 
 安装docker和docker compose
@@ -58,7 +47,7 @@ LNMP Docker Compose
 
 Mac下直接到官网下载Docker.dmg 自带了docker-compose命令 
 
->注意docker需要当前根目录到Preference->File Sharing 否则会出现Mounts denied权限不足
+>注意docker低版本需要当前根目录到Preference->File Sharing 否则会出现Mounts denied权限不足
 
 
 
@@ -66,7 +55,7 @@ Mac下直接到官网下载Docker.dmg 自带了docker-compose命令
 
 下载当前库文件
 
-1.进入上面下载完成后的文件夹 zrb\_php\_docker，打开 `docker-compose.yml`
+1.进入上面下载完成后的文件夹，打开 `docker-compose.yml`
 
 1.1更改mysql的密码：
 ```
@@ -78,8 +67,6 @@ Mac下直接到官网下载Docker.dmg 自带了docker-compose命令
 ```
 打开文件：`./db/redis/etc/redis-password`,更改里面的redis密码即可。
 ```
-
-mysql和redis的密码要记住，后面配置要用到。
 
 
 2.构建：
@@ -221,7 +208,7 @@ docker-compose exec mysql bash
 执行`mysql -uroot -p` 进入mysql
 
 ```
-use php;
+use db;
 source /var/example_db/mysql.sql #替换成你自己的sql文件名称
 exit
 ```
