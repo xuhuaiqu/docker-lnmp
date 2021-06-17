@@ -3,7 +3,9 @@ LNMP Docker Compose
 =============
 
 
-> 通过docker compose 根据官方镜像构建的环境 
+> 通过docker compose 根据官方镜像构建的环境 本项目适用于mac apple芯片版本
+> PHP7.0.33 + Mysql最新版本 + Nginx最新版本 + Redis最新版本 + elasticsearch7.13.1
+
 
 
 目录结构介绍
@@ -243,4 +245,4 @@ docker-compose up -d
 
 [Docker — 从入门到实践](https://yeasy.gitbooks.io/docker_practice)
 
-[Docker LNMP环境搭建](https://www.awaimai.com/2120.html)# dlnmp
+[Docker LNMP环境搭建](https://www.awaimai.com/2120.html)
