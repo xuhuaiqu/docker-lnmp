@@ -1,0 +1,10 @@
+#集群名
+cluster.name: "elasticsearch"
+# 允许外部网络访问
+network.host: 0.0.0.0
+#支持跨域
+http.cors.enabled: true
+#支持所有域名
+http.cors.allow-origin: "*"
+# 关闭xpack安全校验，在kibana中使用就不需要输入账号密码
+xpack.security.enabled: false

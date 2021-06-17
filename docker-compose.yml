@@ -1,0 +1,86 @@
+version: "2"  
+services:
+  php:  
+    build: 
+      context: ./services/php/docker/
+    restart: always
+    volumes:  
+      - ./tool:/usr/work/tool
+      - ./services/php/etc/php7.0.33.ini:/usr/local/etc/php/conf.d/php7.0.33.ini
+    depends_on:
+      - mysql
+    networks:
+        - code-network
+  web:  
+    image: nginx:latest
+    ports:  
+      - "80:80" 
+    restart: always
+    volumes:  
+      - ./tool:/usr/work/tool
+      - ./tool/webserver/conf:/etc/nginx
+      - ./tool/webserver/logs:/www/web_logs
+    networks:
+        - code-network
+    depends_on:
+      - php
+  mysql:
+    platform: linux/x86_64
+    image: mysql
+    ports:  
+      - "3306:3306" 
+    volumes:  
+      - ./db/mysql/data:/var/lib/mysql 
+      - ./db/mysql/log:/var/log/myva
+      - ./db/mysql/example_db:/var/example_db 
+      - ./db/mysql/conf.d:/etc/mysql/conf.d  
+    command: --default-authentication-plugin=mysql_native_password  
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    networks:
+      - code-network 
+  redis:
+    image: redis:latest
+    ports:  
+      - "6379:6379"
+    restart: always
+    environment:
+        REDIS_PASS_FILE: /run/secrets/redis-password
+    command: [
+      "bash", "-c",
+      '
+       docker-entrypoint.sh
+       --requirepass "$$(cat $$REDIS_PASS_FILE)"
+      '
+    ]
+    volumes:
+      - ./db/redis/etc/redis.conf:/usr/local/etc/redis/redis.conf 
+      - ./db/redis/data:/data 
+      - ./db/redis/etc/redis-password:/run/secrets/redis-password 
+    networks:
+      - code-network 
+
+  
+  elasticsearch:
+    image: elasticsearch:7.13.1
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=
+      - cluster.initial_master_nodes=es01
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./db/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./db/elasticsearch/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+      - 9300:9300
+    mem_limit: 1024m
+    networks:
+      - code-network 
+
+networks:
+  code-network:
+    driver: bridge
