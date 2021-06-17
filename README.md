@@ -142,61 +142,12 @@ docker-compose stop
 
 
 
-### 配置php
-
-1.添加域名hosts映射（也就是用ip映射的方式弄假域名），本机（浏览器所在的电脑，也就是您的window本机），添加host(打开etc\hosts，添加如下代码,如果是其他IP，将 127.0.0.1 替换成其他IP即可。)
-
-```
-127.0.0.1 os-vdong.xu.local
-
-```
-1.1在./tool/webserver/conf/vhost/server.conf新增您自己的域名 如：
-
-	server {
-	    listen 80;
-	    server_name os-pinjamyuk.xu.local os-vdong.xu.local os-cashcash.xu.local os-pesoloan.xu.local;
-	    # return 404;
-	    #set_real_ip_from 127.0.0.1/32;
-	    real_ip_header X-Forwarded-For;
-	    charset UTF-8;
-	
-	    include ./vhost/modules/os_order;
-	}
-在./tool/webserver/conf/vhost/modules下面新增os_order文件内容为
-
-	location /os_order/ {
-	    root           /usr/work/tool/webroot/;
-	    fastcgi_pass   php:9000;	#注意这里和线上不一样
-	    fastcgi_index  index.html;
-	    rewrite  ^/os_order/([^/]*)/?(/[^\?]*)?((\?.*)?)$  /os_order/index.php$1$2$3  break;
-	    fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
-	    fastcgi_split_path_info ^(.+\.php)(.*)$;
-	    fastcgi_param PATH_INFO $fastcgi_path_info;
-	    include        fastcgi_params;
-	}
+### 导入测试数据
 
 
-2.配置代码的配置文件
+1.测试数据:
 
-2.1数据库配置：
-在./tool/conf下新建你自己的代码配置文件夹 如os_order配置文件ConfigBase.php示例
-
-	'os_order' => array(
-	            'connectionString' => 'mysql:host=mysql;port=3306;dbname=os_order',
-	            'username' => 'root',
-	            'password' => '123456', #你自己的数据库密码
-	            'class' => 'CDbConnection',
-	        ),
-
-
-
-> 注意：修改数据库配置文件的时候，不要将各个数据库的host修改成`127.0.0.1`，使用默认配置的host即可（docker会通过host映射到相应的容器内网ip，各个容器是隔离的，各个容器的内网ip不是127.0.0.1）,否则，将会出现无法连接的问题
-
-
-
-3.测试数据:
-
-3.1安装mysql数据库的测试数据 推荐使用mysqlworkbench 如果您使用的是命令行,安装mysql数据库的测试数据 将您的sql文件放在./db/mysql/example_db目录下
+1.1安装mysql数据库的测试数据 推荐使用mysqlworkbench 如果您使用的是命令行,安装mysql数据库的测试数据 将您的sql文件放在./db/mysql/example_db目录下
 
 
 并在根目录(docker-compose.yml文件所在目录)下执行，进入mysql的容器
