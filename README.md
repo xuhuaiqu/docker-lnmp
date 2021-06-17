@@ -159,12 +159,6 @@ exit
 `exit`，退出容器,回到宿主主机
 
 
-```
-docker-compose stop
-docker-compose up -d
-```
-
-然后就可以访问了
 ### 常见问题
 1.[Docker-compose up failing because "port is already allocated"](https://github.com/docker/compose/issues/4950)
 
