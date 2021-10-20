@@ -1,5 +1,5 @@
 
-DLNMP
+LNMP
 =============
 
 > 通过docker compose 根据官方镜像构建的环境 本项目适用于mac apple芯片版本
